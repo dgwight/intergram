@@ -1,4 +1,4 @@
-import { h, Component } from 'preact';
+import {h, Component} from 'preact';
 import ChatFrame from './chat-frame';
 import ChatFloatingButton from './chat-floating-button';
 import ChatTitleMsg from './chat-title-msg';
@@ -18,6 +18,11 @@ export default class Widget extends Component {
         this.state.isChatOpen = false;
         this.state.pristine = true;
         this.state.wasChatOpened = this.wasChatOpened();
+
+        const self = this;
+        setTimeout(function () {
+            self.onClick();
+        }, 1000)
     }
 
     render({conf, isMobile}, {isChatOpen, pristine}) {
@@ -28,26 +33,24 @@ export default class Widget extends Component {
 
         let wrapperStyle;
         if (!isChatOpen && (isMobile || conf.alwaysUseFloatingButton)) {
-            wrapperStyle = { ...mobileClosedWrapperStyle}; // closed mobile floating button
-        } else if (!isMobile){
+            wrapperStyle = {...mobileClosedWrapperStyle}; // closed mobile floating button
+        } else if (!isMobile) {
             wrapperStyle = (conf.closedStyle === 'chat' || isChatOpen || this.wasChatOpened()) ?
                 (isChatOpen) ?
-                    { ...desktopWrapperStyle, ...wrapperWidth} // desktop mode, button style
+                    {...desktopWrapperStyle, ...wrapperWidth} // desktop mode, button style
                     :
-                    { ...desktopWrapperStyle}
+                    {...desktopWrapperStyle}
                 :
-                { ...desktopClosedWrapperStyleChat}; // desktop mode, chat style
+                {...desktopClosedWrapperStyleChat}; // desktop mode, chat style
         } else {
             wrapperStyle = mobileOpenWrapperStyle; // open mobile wrapper should have no border
         }
-
-        onClick()
 
         return (
             <div style={wrapperStyle}>
 
                 {/* Open/close button */}
-                { (isMobile || conf.alwaysUseFloatingButton) && !isChatOpen ?
+                {(isMobile || conf.alwaysUseFloatingButton) && !isChatOpen ?
 
                     <ChatFloatingButton color={conf.mainColor} onClick={this.onClick}/>
 
@@ -69,7 +72,7 @@ export default class Widget extends Component {
                     display: isChatOpen ? 'block' : 'none',
                     height: isMobile ? '100%' : desktopHeight
                 }}>
-                    {pristine ? null : <ChatFrame {...this.props} /> }
+                    {pristine ? null : <ChatFrame {...this.props} />}
                 </div>
 
             </div>
@@ -77,11 +80,12 @@ export default class Widget extends Component {
     }
 
     onClick = () => {
+        console.log('onClick');
         let stateData = {
             pristine: false,
             isChatOpen: !this.state.isChatOpen,
         }
-        if(!this.state.isChatOpen && !this.wasChatOpened()){
+        if (!this.state.isChatOpen && !this.wasChatOpened()) {
             this.setCookie();
             stateData.wasChatOpened = true;
         }
@@ -91,18 +95,18 @@ export default class Widget extends Component {
     setCookie = () => {
         let date = new Date();
         let expirationTime = parseInt(this.props.conf.cookieExpiration);
-        date.setTime(date.getTime()+(expirationTime*24*60*60*1000));
-        let expires = "; expires="+date.toGMTString();
-        document.cookie = "chatwasopened=1"+expires+"; path=/";
+        date.setTime(date.getTime() + (expirationTime * 24 * 60 * 60 * 1000));
+        let expires = "; expires=" + date.toGMTString();
+        document.cookie = "chatwasopened=1" + expires + "; path=/";
     }
 
     getCookie = () => {
         var nameEQ = "chatwasopened=";
         var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
+        for (var i = 0; i < ca.length; i++) {
             var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
         }
         return false;
     }

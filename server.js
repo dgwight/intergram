@@ -49,6 +49,7 @@ io.on('connection', function(client){
         let chatId = registerMsg.chatId;
         let messageReceived = false;
         console.log("useId " + userId + " connected to chatId " + chatId);
+        sendTelegramMessage(chatId, userId + " has joined");
 
         client.on('message', function(msg) {
             messageReceived = true;
