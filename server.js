@@ -49,7 +49,8 @@ io.on('connection', function(client){
         let chatId = registerMsg.chatId;
         let messageReceived = false;
         console.log("useId " + userId + " connected to chatId " + chatId);
-        sendTelegramMessage(chatId, userId + " has joined");
+        let visitorName = registerMsg.visitorName ? "[" + registerMsg.visitorName + "]: " : "";
+        sendTelegramMessage(chatId, userId + ":" + visitorName + " has joined");
 
         client.on('message', function(msg) {
             messageReceived = true;
@@ -60,7 +61,7 @@ io.on('connection', function(client){
 
         client.on('disconnect', function(){
             if (messageReceived) {
-                sendTelegramMessage(chatId, userId + " has left");
+                sendTelegramMessage(chatId, userId + ":" + visitorName + " has left");
             }
         });
     });
