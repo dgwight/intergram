@@ -19,10 +19,10 @@ export default class Widget extends Component {
         this.state.pristine = true;
         this.state.wasChatOpened = this.wasChatOpened();
 
-        const self = this;
-        setTimeout(function () {
-            self.onClick();
-        }, 1000)
+        // const self = this;
+        // setTimeout(function () {
+        //     self.onClick();
+        // }, 1000)
     }
 
     render({conf, isMobile}, {isChatOpen, pristine}) {
