@@ -22,7 +22,7 @@ export default class Widget extends Component {
         // const self = this;
         // setTimeout(function () {
         //     self.onClick();
-        // }, 1000)
+        // }, 1000)f
     }
 
     render({conf, isMobile}, {isChatOpen, pristine}) {
@@ -80,7 +80,6 @@ export default class Widget extends Component {
     }
 
     onClick = () => {
-        console.log('onClick');
         let stateData = {
             pristine: false,
             isChatOpen: !this.state.isChatOpen,
